@@ -1,7 +1,5 @@
 import { initializeStorageWithDefaults } from './storage';
 
-const WELCOME_PAGE = "https://www.iterspace.com/welcome";
-const GOODBYE_PAGE= "https://www.iterspace.com/goodbye";
 // Log storage changes, might be safely removed
 chrome.storage.onChanged.addListener((changes) => {
   for (const [key, value] of Object.entries(changes)) {
@@ -18,10 +16,10 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   });
   if (reason === "update") {
     await chrome.tabs.create({
-      url: WELCOME_PAGE,
+      url: process.env.WELCOME_PAGE,
     })
     if (chrome.runtime.setUninstallURL) {
-      chrome.runtime.setUninstallURL(GOODBYE_PAGE)
+      chrome.runtime.setUninstallURL(process.env.GOODBYE_PAGE)
     }
   }
   console.log('Extension successfully installed!');
