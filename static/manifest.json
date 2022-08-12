@@ -1,0 +1,41 @@
+{
+  "name": "iterspace BETA: Screen Rec. + Feedback",
+  "version": "0.1.61",
+  "description": "💡 Share accurate feedback in seconds",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "serviceWorker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "permissions": ["storage", "scripting"],
+  "action": {
+    "default_title": "Iterspace Browser Extension",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/icons/16x.png",
+      "32": "/icons/32x.png",
+      "36": "/icons/36x.png",
+      "48": "/icons/48x.png",
+      "72": "/icons/72x.png",
+      "96": "/icons/96x.png",
+      "144": "/icons/144x.png",
+      "310": "/icons/310x.png"
+    }
+  },
+  "icons": {
+    "16": "/icons/16x.png",
+    "32": "/icons/32x.png",
+    "36": "/icons/36x.png",
+    "48": "/icons/48x.png",
+    "72": "/icons/72x.png",
+    "96": "/icons/96x.png",
+    "144": "/icons/144x.png",
+    "310": "/icons/310x.png"
+  }
+}

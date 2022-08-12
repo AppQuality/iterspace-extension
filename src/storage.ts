@@ -1,5 +1,6 @@
-// Define your storage data here
-export interface Storage {} // eslint-disable-line
+export interface Storage {
+  isRecording: boolean,
+}
 
 export function getStorageData(): Promise<Storage> {
   return new Promise((resolve, reject) => {
