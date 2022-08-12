@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   await initializeStorageWithDefaults({
     isRecording:false
   });
-  if (reason === "update") {
+  if (reason === "install") {
     await chrome.tabs.create({
       url: process.env.WELCOME_PAGE,
     })
