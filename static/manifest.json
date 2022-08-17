@@ -13,7 +13,7 @@
       "js": ["contentScript.js"]
     }
   ],
-  "permissions": ["storage", "scripting"],
+  "permissions": ["storage", "scripting", "desktopCapture"],
   "action": {
     "default_title": "Iterspace Browser Extension",
     "default_popup": "popup.html",
