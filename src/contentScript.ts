@@ -19,16 +19,48 @@ async function getDevices() {
 }
 
 async function getMedia() {
+
   let stream = null;
+  const recordedChunks: Blob[] = [];
+
+  const download = () => {
+    const blob = new Blob(recordedChunks, {
+      type: "video/webm"
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = "test.webm";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
 
   try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true
+    console.log('start media stream');
+    stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
     });
+    const options = { mimeType: "video/webm; codecs=vp9" };
+    const mediaRecorder = new MediaRecorder(stream, options);
+    mediaRecorder.ondataavailable = (event) => {
+      console.log("data-available");
+      if (event.data.size > 0) {
+        recordedChunks.push(event.data);
+        console.log(recordedChunks);
+        download();
+      } else {
+        console.warn("event.data.size <= 0")
+      }
+    };
+    mediaRecorder.start();
+    setTimeout(()=>{
+      //mediaRecorder.stop();
+    }, 3000);
     /* use the stream */
   } catch (err) {
     /* handle the error */
+    console.warn(err);
   }
 }
 
@@ -38,6 +70,7 @@ chrome.runtime.onMessage.addListener(
     if (request.type === "recordScreen") {
       console.log("recordScreen", sender);
       getDevices();
+      getMedia();
     }
   }
 );
