@@ -9,11 +9,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://*/*"],
       "js": ["contentScript.js"]
     }
   ],
-  "permissions": ["storage", "scripting", "desktopCapture"],
+  "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs"],
   "action": {
     "default_title": "Iterspace Browser Extension",
     "default_popup": "popup.html",

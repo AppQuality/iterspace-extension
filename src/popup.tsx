@@ -5,8 +5,10 @@ const root = createRoot(container!); // createRoot(container!) if you use TypeSc
 
 const capture = () => {
   console.log('capture screen');
-  chrome.runtime.sendMessage({action: "recordScreen"}, function(response) {
-    console.log(response);
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {type:"recordScreen", pippo:"suca"}, function(response){
+      console.log("log response from popup",response);
+    });
   });
 }
 
