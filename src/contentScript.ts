@@ -54,9 +54,6 @@ async function getMedia() {
       }
     };
     mediaRecorder.start();
-    setTimeout(()=>{
-      //mediaRecorder.stop();
-    }, 3000);
     /* use the stream */
   } catch (err) {
     /* handle the error */
