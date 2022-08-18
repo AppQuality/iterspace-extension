@@ -7,10 +7,10 @@
     "service_worker": "serviceWorker.js",
     "type": "module"
   },
-  "content_scripts": [
+  "web_accessible_resources": [
     {
       "matches": ["https://*/*"],
-      "js": ["contentScript.js"]
+      "resources": ["record.html"]
     }
   ],
   "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs"],

@@ -10,7 +10,6 @@ export class Recorder {
       console.warn('there is no stream initialized, abort new Record initialization');
       return;
     }
-    window.localStream;
     this.options = { mimeType: "video/webm; codecs=h264" };
     this.recordedChunks = [];
   }

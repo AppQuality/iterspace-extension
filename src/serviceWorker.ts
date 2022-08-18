@@ -1,4 +1,4 @@
-import { initializeStorageWithDefaults } from './storage';
+import {initializeStorageWithDefaults, setStorageItem} from './storage';
 
 // Log storage changes, might be safely removed
 chrome.storage.onChanged.addListener((changes) => {
@@ -23,4 +23,14 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     }
   }
   console.log('Extension successfully installed!');
+})
+
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.type === 'startRecording') {
+    await chrome.tabs.create({
+      active: true,
+      url: 'record.html'
+    });
+    setStorageItem('isRecording', true);
+  }
 })
