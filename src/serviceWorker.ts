@@ -22,7 +22,6 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
       chrome.runtime.setUninstallURL(process.env.GOODBYE_PAGE)
     }
   }
-  console.log('Extension successfully installed!');
 })
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
@@ -32,5 +31,12 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       url: 'record.html'
     });
     setStorageItem('isRecording', true);
+  }
+  if (message.type === 'stopRecording') {
+    // await chrome.tabs.create({
+    //   active: true,
+    //   url: 'record.html'
+    // });
+    setStorageItem('isRecording', false);
   }
 })
