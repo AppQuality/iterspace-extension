@@ -1,18 +1,19 @@
 import {getStorageItem, initializeStorageWithDefaults, setStorageItem} from './storage';
 
 // Log storage changes, might be safely removed
-chrome.storage.onChanged.addListener((changes) => {
-  for (const [key, value] of Object.entries(changes)) {
-    console.log(
-      `"${key}" changed from "${value.oldValue}" to "${value.newValue}"`,
-    );
-  }
-});
+// chrome.storage.onChanged.addListener((changes) => {
+//   for (const [key, value] of Object.entries(changes)) {
+//     console.log(
+//       `"${key}" changed from "${value.oldValue}" to "${value.newValue}"`,
+//     );
+//   }
+// });
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   console.log('onInstalled listener triggered. Reason:', reason);
   await initializeStorageWithDefaults({
-    recordingStatus: "stopped"
+    recordingStatus: "stopped",
+    audioStatus: "inactive"
   });
   if (reason === "install") {
     await chrome.tabs.create({
@@ -39,32 +40,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 })
 
 chrome.runtime.onMessage.addListener(async (message: MessageTypes) => {
-  if (message.type === 'startRecording') {
-    setStorageItem('recordingStatus', "recording");
-  }
   if (message.type === 'initScreenCapturing') {
     const controlTab = await getStorageItem('controlTab');
-    console.log(controlTab);
     if (!controlTab) {
       openControlTab();
       return;
     }
     try {
       const controlTabAlreadyOpen = await chrome.tabs.get(controlTab);
-      console.log(controlTabAlreadyOpen);
       chrome.tabs.update(controlTabAlreadyOpen.id, {active: true});
     } catch (e) {
       openControlTab();
     }
     setStorageItem('recordingStatus', "initScreenCapturing");
-  }
-  if (message.type === 'initCountDown') {
-    setStorageItem('recordingStatus', "countDown");
-  }
-  if (message.type === 'stopRecording') {
-    setStorageItem("recordingStatus", "stopped");
-  }
-  if (message.type === 'pauseRecording') {
-    setStorageItem("recordingStatus", "paused");
   }
 })

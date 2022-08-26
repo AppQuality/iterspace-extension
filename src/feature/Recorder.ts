@@ -1,6 +1,7 @@
 
 export class Recorder {
   stream: MediaStream;
+  audioStream: MediaStream;
   options: MediaRecorderOptions;
   recordedChunks: Blob[];
   mediaRecorder: MediaRecorder;
@@ -24,6 +25,29 @@ export class Recorder {
   }
   stopRecording() {
     this.stream.getTracks().forEach(track => track.stop());
+  }
+  async addAudioTrack() {
+    const audioStream = await this.getAudioStream();
+    audioStream.getAudioTracks().forEach(track => {
+      this.stream.addTrack(track);
+    });
+  }
+  async muteAudioTrack() {
+    this.stream.getAudioTracks().forEach(track => {
+      console.log("mute audio",track);
+      track.enabled = false;
+    })
+  }
+  async unmuteAudioTrack() {
+    this.stream.getAudioTracks().forEach(track => {
+      console.log("mute audio", track);
+      track.enabled = true;
+    })
+  }
+  async getAudioStream() {
+    return await navigator.mediaDevices.getUserMedia({audio: {
+        echoCancellation: true
+      }, video: false});
   }
   download() {
     const blob = new Blob(this.recordedChunks, {

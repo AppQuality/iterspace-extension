@@ -1,18 +1,35 @@
 import React, {useEffect, useState} from "react";
-import {getStorageItem} from "../storage";
+import {getStorageItem, setStorageItem} from "../storage";
+import {ToggleAudioButton} from "./ToggleAudioButton";
 
-export const Popup = () => {
+export const RecordingController = () => {
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>("stopped");
+  const [micPermission, setMicPermission] = useState<PermissionState>("denied");
+  const [audioStatus, setAudioStatus] = useState<AudioStatus>("inactive");
   useEffect(() => {
     const getInitialRecordingValue = async () => {
       const recording = await getStorageItem('recordingStatus');
+      const audio = await getStorageItem('audioStatus');
       setRecordingStatus(recording);
+      setAudioStatus(audio);
+    }
+    const getMicrophonePermissions = async () => {
+      const response = await window.navigator.permissions.query({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        name: 'microphone',
+      })
+      setMicPermission(response.state);
     }
     getInitialRecordingValue();
+    getMicrophonePermissions();
     chrome.storage.onChanged.addListener((changes) => {
       for (const [key, value] of Object.entries(changes)) {
         if (key === 'recordingStatus') {
           setRecordingStatus(value.newValue);
+        }
+        if (key === 'audioStatus') {
+          setAudioStatus(value.newValue);
         }
       }
     });
@@ -21,10 +38,10 @@ export const Popup = () => {
     chrome.runtime.sendMessage<MessageTypes>({type:"initScreenCapturing"});
   }
   const stopRecording = () => {
-    chrome.runtime.sendMessage<MessageTypes>({type:"stopRecording"});
+    setStorageItem("recordingStatus", "stopped");
   }
   const pauseRecording = () => {
-    chrome.runtime.sendMessage<MessageTypes>({type:"pauseRecording"});
+    setStorageItem("recordingStatus", "paused");
   }
   return (
     <div>
@@ -45,6 +62,15 @@ export const Popup = () => {
         <span>waiting</span> <button onClick={stopRecording}>stop</button>
       </>
       }
+      <div>
+        <p>Audio</p>
+        {micPermission === "denied"
+         ? <>
+             <button disabled>mic denied</button>
+           </>
+         : <ToggleAudioButton audioStatus={audioStatus} recordingStatus={recordingStatus} />
+        }
+      </div>
     </div>
   )
 }
