@@ -13,7 +13,7 @@ const permissions = async () => {
   alert(result.state)
 }
 const Popup = () => {
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState("false");
   useEffect(() => {
     const getInitialRecordingValue = async () => {
       const recording = await getStorageItem('isRecording');
@@ -29,7 +29,7 @@ const Popup = () => {
     });
   }, []);
   const startRecording = () => {
-    chrome.runtime.sendMessage({type:"startRecording"});
+    chrome.runtime.sendMessage({type:"initRecordingSequence"});
   }
   const stopRecording = () => {
     chrome.runtime.sendMessage({type:"stopRecording"});
@@ -37,9 +37,13 @@ const Popup = () => {
   return (
     <div>
       <p>Popup</p>
-      {isRecording
-        ? <button onClick={stopRecording}>stop recording</button>
-        : <button onClick={startRecording}>start recording</button>
+      {isRecording === "true" && <button onClick={stopRecording}>stop capture screen</button>}
+      {isRecording === "false" && <button onClick={startRecording}>start capture screen</button>}
+      {isRecording === "idle" &&
+        <>
+          <button disabled>waiting</button>
+          <button onClick={stopRecording}>stop capture screen</button>
+        </>
       }
     </div>
   )

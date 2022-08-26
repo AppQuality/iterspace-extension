@@ -12,7 +12,7 @@ chrome.storage.onChanged.addListener((changes) => {
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   console.log('onInstalled listener triggered. Reason:', reason);
   await initializeStorageWithDefaults({
-    isRecording:false
+    isRecording: "false"
   });
   if (reason === "install") {
     await chrome.tabs.create({
@@ -26,17 +26,16 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'startRecording') {
+    setStorageItem('isRecording', "true");
+  }
+  if (message.type === 'initRecordingSequence') {
     await chrome.tabs.create({
       active: true,
       url: 'record.html'
     });
-    setStorageItem('isRecording', true);
+    setStorageItem('isRecording', "idle");
   }
   if (message.type === 'stopRecording') {
-    // await chrome.tabs.create({
-    //   active: true,
-    //   url: 'record.html'
-    // });
-    setStorageItem('isRecording', false);
+    setStorageItem('isRecording', "false");
   }
 })

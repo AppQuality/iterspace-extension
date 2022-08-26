@@ -13,7 +13,7 @@
       "resources": ["record.html"]
     }
   ],
-  "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs"],
+  "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs", "alarms"],
   "action": {
     "default_title": "Iterspace Browser Extension",
     "default_popup": "popup.html",

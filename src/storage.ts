@@ -1,5 +1,5 @@
 export interface Storage {
-  isRecording: boolean,
+  isRecording: "true" | "false" | "idle",
 }
 
 export function getStorageData(): Promise<Storage> {
