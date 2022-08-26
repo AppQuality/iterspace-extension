@@ -5,16 +5,13 @@ export class Recorder {
   recordedChunks: Blob[];
   mediaRecorder: MediaRecorder;
 
-  constructor() {
-    if (!window.localStream) {
-      console.warn('there is no stream initialized, abort new Record initialization');
-      return;
-    }
+  constructor(stream: MediaStream) {
+    this.stream = stream;
     this.options = { mimeType: "video/webm; codecs=h264" };
     this.recordedChunks = [];
   }
   startRecording() {
-    this.mediaRecorder = new MediaRecorder(window.localStream, this.options);
+    this.mediaRecorder = new MediaRecorder(this.stream, this.options);
     this.mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         this.recordedChunks.push(event.data);
@@ -24,6 +21,9 @@ export class Recorder {
       }
     };
     this.mediaRecorder.start();
+  }
+  stopRecording() {
+    this.stream.getTracks().forEach(track => track.stop());
   }
   download() {
     const blob = new Blob(this.recordedChunks, {
