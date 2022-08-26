@@ -1,5 +1,5 @@
 import {createRoot} from "react-dom/client";
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Recorder} from './feature/Recorder';
 import {getStorageItem, setStorageItem} from "./storage";
 import {RecordingController} from "./feature/RecordingController";
@@ -9,29 +9,6 @@ const root = createRoot(container!); // createRoot(container!) if you use TypeSc
 
 declare global {
   interface Window { localStream?: MediaStream; }
-}
-type State = {
-  recordingStatus: RecordingStatus
-  audioStatus: AudioStatus
-}
-
-type Action = {
-  type: "setRecordingStatus",
-  payload: RecordingStatus
-} | {
-  type: "setAudioStatus",
-  payload: AudioStatus
-} | {
-  type: "setState",
-  payload: {
-    recordingStatus: RecordingStatus
-    audioStatus: AudioStatus
-  }
-}
-
-const initialState: State = {
-  recordingStatus: "stopped",
-  audioStatus: "inactive",
 }
 
 const getVideoStream = async () => {

@@ -8,7 +8,6 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
   const deactivateAudio = () => {
     setStorageItem("audioStatus", "inactive");
   }
-  // is recording
   if (audioStatus === 'inactive')
     return <button onClick={activateAudio}>Unmute</button>
 

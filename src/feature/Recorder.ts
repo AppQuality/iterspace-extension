@@ -1,7 +1,6 @@
 
 export class Recorder {
   stream: MediaStream;
-  audioStream: MediaStream;
   options: MediaRecorderOptions;
   recordedChunks: Blob[];
   mediaRecorder: MediaRecorder;
