@@ -68,7 +68,7 @@ export const RecordingController = () => {
          ? <>
              <button disabled>mic denied</button>
            </>
-         : <ToggleAudioButton audioStatus={audioStatus} recordingStatus={recordingStatus} />
+         : <ToggleAudioButton audioStatus={audioStatus} />
         }
       </div>
     </div>

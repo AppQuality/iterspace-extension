@@ -9,4 +9,4 @@ type MessageTypes = {
 }
 
 type RecordingStatus = "recording" | "paused" | "stopped" | "countDown" | "initScreenCapturing";
-type AudioStatus = "active" | "paused" | "inactive"
+type AudioStatus = "active" | "inactive"
