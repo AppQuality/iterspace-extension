@@ -31,7 +31,8 @@ const ScreenRecorder = () => {
       const stream = await getVideoStream();
       initVideoPreview(stream);
       stream.getVideoTracks()[0].onended = function () {
-        setStorageItem('recordingStatus', 'stopped')
+        setStorageItem('recordingStatus', 'stopped');
+        chrome.alarms.clear('startRecordingCountDown');
       };
       const recorder = new Recorder(stream);
       if (audioStatus === 'active') {
