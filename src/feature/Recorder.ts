@@ -1,3 +1,4 @@
+import {UploadS3} from "./UploadS3";
 
 export class Recorder {
   stream: MediaStream;
@@ -15,7 +16,12 @@ export class Recorder {
     this.mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         this.recordedChunks.push(event.data);
-        this.download();
+        //this.download();
+        const blob = new Blob(this.recordedChunks, {
+          type: 'video/webm',
+        })
+        const upload = new UploadS3(blob);
+        upload.startMultiUpload();
       } else {
         console.warn("event.data.size <= 0")
       }

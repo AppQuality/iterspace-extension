@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
       chrome.runtime.setUninstallURL(process.env.GOODBYE_PAGE)
     }
   }
-})
+});
 
 async function openControlTab() {
   const newTab = await chrome.tabs.create({
