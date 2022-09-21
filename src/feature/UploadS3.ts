@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import AWS from "aws-sdk"
 
 export class UploadS3 {
@@ -14,9 +13,9 @@ export class UploadS3 {
   identityPoolId = 'eu-central-1:c8fd3bd1-2c94-4938-9ebd-c37b163f20e7';
   bucketName = 'iterspace-bucket-dev';
 
-  constructor(blob: Blob) {
+  constructor(blob: Blob, id: string) {
     this.blob = blob;
-    this.recordingId = uuidv4();
+    this.recordingId = id;
     this.fileName = `public/${this.recordingId}.webm`;
     AWS.config.update({
       region: this.region,

@@ -7,12 +7,22 @@
     "service_worker": "serviceWorker.js",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://*/temporary/*", "http://*/temporary/*"],
+      "js": ["blob.js"]
+    }
+  ],
   "web_accessible_resources": [
     {
       "matches": ["https://*/*"],
       "resources": ["record.html"]
     }
   ],
+  "externally_connectable": {
+    "matches": ["http://localhost/*"]
+  },
+
   "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs", "alarms"],
   "action": {
     "default_title": "Iterspace Browser Extension",

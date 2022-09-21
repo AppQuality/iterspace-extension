@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {Recorder} from './feature/Recorder';
 import {getStorageItem, setStorageItem} from "./storage";
 import {RecordingController} from "./feature/RecordingController";
-require('./config.extension.dev.js');
 
 const container = document.getElementById('recordingInterface');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript

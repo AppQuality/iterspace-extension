@@ -10,6 +10,7 @@ module.exports = {
     serviceWorker: './src/serviceWorker.ts',
     record: './src/record.tsx',
     popup: './src/popup.tsx',
+    blob: './src/getBlob.tsx',
   },
   module: {
     rules: [

@@ -55,3 +55,24 @@ chrome.runtime.onMessage.addListener(async (message: MessageTypes) => {
     setStorageItem('recordingStatus', "initScreenCapturing");
   }
 })
+
+chrome.runtime.onMessageExternal.addListener(async (request, sender, sendResponse) => {
+  if (request.type === "REQUEST_VIDEO_BLOB") {
+    const recording = await getStorageItem('recording');
+    sendResponse(recording);
+  }
+  if (request.type === "SESSION_CREATED") {
+    const { sessionId, recording } = request;
+    recording.sessionId = sessionId;
+    const tabs = await chrome.tabs.query({ active: true });
+
+    chrome.tabs.sendMessage(tabs[0].id, {
+      type: "SESSION_CREATED_NEW",
+      sessionId: sessionId,
+      recording: recording
+    }, (response) => {
+      console.log('response of SESSION_CREATED_NEW', response)
+      sendResponse('ok');
+    });
+  }
+});

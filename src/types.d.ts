@@ -2,6 +2,7 @@ type ExtensionStorage = {
   controlTab?: number
   recordingStatus: RecordingStatus,
   audioStatus: AudioStatus
+  recording?: object
 }
 
 type MessageTypes = {
