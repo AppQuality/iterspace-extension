@@ -23,7 +23,15 @@
     "matches": ["http://localhost/*"]
   },
 
-  "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs", "alarms"],
+  "permissions": [
+    "storage",
+    "scripting",
+    "desktopCapture",
+    "activeTab",
+    "tabs",
+    "alarms",
+    "webNavigation"
+  ],
   "action": {
     "default_title": "Iterspace Browser Extension",
     "default_popup": "popup.html",

@@ -1,6 +1,7 @@
 import { Decoder, Reader, tools } from 'ts-ebml';
 import { v4 as uuidv4 } from 'uuid';
 import { setStorageItem } from '../storage';
+import getBlobDuration from 'get-blob-duration';
 
 export class Recorder {
   id: string;
@@ -102,10 +103,13 @@ export class Recorder {
     elements.forEach((elm) => {
       reader.read(elm);
     });
+    const duration = await getBlobDuration(webmBlob);
+
+    console.log(duration);
 
     const refinedMetadataBuf = tools.makeMetadataSeekable(
       reader.metadatas,
-      reader.duration,
+      duration * 1000,
       reader.cues,
     );
     const body = buffer.slice(reader.metadataSize);
