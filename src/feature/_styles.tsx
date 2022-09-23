@@ -1,5 +1,5 @@
-import { theme } from "@appquality/unguess-design-system";
 import styled from "styled-components";
+import { palette } from "../theme/palette";
 
 export const StyledPopupHeader = styled.div`
   display: flex;
@@ -8,7 +8,7 @@ export const StyledPopupHeader = styled.div`
   padding: 0 24px 0 16px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid ${theme.palette.grey[200]};
+  border-bottom: 1px solid ${palette.grey[200]};
 
   .header-left {
     display: flex;

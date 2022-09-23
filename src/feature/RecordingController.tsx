@@ -6,6 +6,7 @@ import logoIcon from "./assets/logo.svg";
 import recordingIcon from "./assets/iconLeft.svg";
 import closeButton from "./assets/closeButton.svg";
 import { StyledPopupBody, StyledPopupHeader } from "./_styles";
+import { palette } from "../theme/palette";
 
 export const RecordingController = () => {
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>("stopped");
@@ -64,16 +65,18 @@ export const RecordingController = () => {
         </div>
       </StyledPopupHeader>
       <StyledPopupBody>
+        {micPermission === "denied" || micPermission === "prompt" &&
+          <Button 
+            className="generic-button"
+            themeColor={palette.grey[900]}
+            isStretched
+          >
+              Attiva microfono
+          </Button>
+        }
         <Button 
           className="generic-button"
-          themeColor={theme.palette.grey[800]}
-          isStretched
-        >
-            Attiva microfono
-        </Button>
-        <Button 
-          className="generic-button"
-          themeColor={theme.palette.grey[800]}
+          themeColor={palette.grey[900]}
           onClick={recordingStatus === "recording" ? stopRecording : startRecording}
           isStretched 
           isPrimary
