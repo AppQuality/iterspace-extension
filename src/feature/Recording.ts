@@ -1,6 +1,5 @@
 import { getStorageItem, setStorageItem } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
-import Stopwatch from './Stopwatch';
 
 class Recording {
   private data;
@@ -32,6 +31,7 @@ class Recording {
   }
 
   stop() {
+    this.stopwatch.stop();
     return this.get();
   }
 
@@ -41,35 +41,36 @@ class Recording {
 
   async addNavigationDetails(details) {
     await this.init();
-    if (details.url.startsWith('http')) {
-      const eventType =
-        details.frameId === 0 && details.parentFrameId === -1
-          ? 'navigation'
-          : 'webRequest';
-      await this.addEvent({
-        ...details,
-        type: eventType,
-      });
-    }
+    const eventType =
+      details.frameId === 0 && details.parentFrameId === -1
+        ? 'navigation'
+        : 'webRequest';
+    await this.addEvent({
+      ...details,
+      type: eventType,
+    });
   }
 
   async addEvent(details) {
-    this.events.push({
-      id: uuidv4(),
-      type: details.type,
-      url: details.url,
-      timestamp: details.timestamp ? Math.round(details.timestamp / 1000) : 0,
-      videoTime: this.getCurrentVideoTime(),
-      data: {
-        statusCode: details.statusCode,
-        statusLine: details.statusLine,
-        method: details.method,
-        ip: details.ip,
-        initiator: details.initiator,
-        requestType: details.type,
-      },
-    });
-    await this.save();
+    if (details.url.startsWith('http')) {
+      this.events.push({
+        id: uuidv4(),
+        type: details.type,
+        url: details.url,
+        timestamp: details.timestamp ? Math.round(details.timestamp / 1000) : 0,
+        videoTime: this.getCurrentVideoTime(),
+        data: {
+          statusCode: details.statusCode,
+          statusLine: details.statusLine,
+          method: details.method,
+          ip: details.ip,
+          initiator: details.initiator,
+          requestType: details.type,
+          error: details.error,
+        },
+      });
+      await this.save();
+    }
   }
 
   async save() {

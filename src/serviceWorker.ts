@@ -94,8 +94,34 @@ chrome.runtime.onMessageExternal.addListener(
 
 chrome.webNavigation.onBeforeNavigate.addListener(
   async (details) => {
-    const recordingManager = new Recording(stopwatch);
-    await recordingManager.addNavigationDetails(details);
+    if (isCurrentTab(details.tabId)) {
+      const recordingManager = new Recording(stopwatch);
+      await recordingManager.addNavigationDetails(details);
+    }
+    return details;
+  },
+  { urls: ['<all_urls>'] },
+  [],
+);
+
+chrome.webRequest.onCompleted.addListener(
+  async (details) => {
+    if (isCurrentTab(details.tabId)) {
+      const recordingManager = new Recording(stopwatch);
+      await recordingManager.addEvent({ ...details, type: 'webRequest' });
+    }
+    return details;
+  },
+  { urls: ['<all_urls>'] },
+  [],
+);
+
+chrome.webRequest.onErrorOccurred.addListener(
+  async (details) => {
+    if (isCurrentTab(details.tabId)) {
+      const recordingManager = new Recording(stopwatch);
+      await recordingManager.addEvent({ ...details, type: 'webErrorRequest' });
+    }
     return details;
   },
   { urls: ['<all_urls>'] },
@@ -104,7 +130,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(
 
 const theChrome = chrome;
 
-const getCurrentTab = async () => {
+const isCurrentTab = async (tabId) => {
   return new Promise((resolve) => {
     theChrome.tabs.query(
       {
@@ -113,7 +139,7 @@ const getCurrentTab = async () => {
       },
       (tabs) => {
         const currentTab = tabs[0];
-        resolve(currentTab);
+        resolve(currentTab && currentTab.id === tabId);
       },
     );
   });

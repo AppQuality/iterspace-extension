@@ -30,7 +30,8 @@
     "activeTab",
     "tabs",
     "alarms",
-    "webNavigation"
+    "webNavigation",
+    "webRequest"
   ],
   "action": {
     "default_title": "Iterspace Browser Extension",
