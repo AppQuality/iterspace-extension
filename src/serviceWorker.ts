@@ -75,7 +75,7 @@ chrome.runtime.onMessageExternal.addListener(
       const { sessionId, recording } = request;
       recording.sessionId = sessionId;
       const tabs = await chrome.tabs.query({ active: true });
-      setTimeout(()=>{
+      const sendMessageToContentScript = () =>
         chrome.tabs.sendMessage(
           tabs[0].id,
           {
@@ -84,11 +84,14 @@ chrome.runtime.onMessageExternal.addListener(
             recording: recording,
           },
           (response) => {
-            console.log('response of SESSION_CREATED_NEW', response);
-            sendResponse(response);
+            if (response) {
+              sendResponse(response);
+            } else {
+              setTimeout(sendMessageToContentScript, 500)
+            }
           },
         );
-      }, 1500)
+      sendMessageToContentScript()
     }
   },
 );
