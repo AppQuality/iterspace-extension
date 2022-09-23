@@ -75,19 +75,20 @@ chrome.runtime.onMessageExternal.addListener(
       const { sessionId, recording } = request;
       recording.sessionId = sessionId;
       const tabs = await chrome.tabs.query({ active: true });
-
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        {
-          type: 'SESSION_CREATED_NEW',
-          sessionId: sessionId,
-          recording: recording,
-        },
-        (response) => {
-          console.log('response of SESSION_CREATED_NEW', response);
-          sendResponse('ok');
-        },
-      );
+      setTimeout(()=>{
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          {
+            type: 'SESSION_CREATED_NEW',
+            sessionId: sessionId,
+            recording: recording,
+          },
+          (response) => {
+            console.log('response of SESSION_CREATED_NEW', response);
+            sendResponse(response);
+          },
+        );
+      }, 1500)
     }
   },
 );
@@ -101,6 +102,8 @@ chrome.webNavigation.onBeforeNavigate.addListener(
     return details;
   },
   { urls: ['<all_urls>'] },
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
   [],
 );
 
@@ -130,7 +133,7 @@ chrome.webRequest.onErrorOccurred.addListener(
 
 const theChrome = chrome;
 
-const isCurrentTab = async (tabId) => {
+const isCurrentTab = async (tabId: number) => {
   return new Promise((resolve) => {
     theChrome.tabs.query(
       {
