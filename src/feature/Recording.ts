@@ -1,15 +1,27 @@
 import { getStorageItem, setStorageItem } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
+import Stopwatch from './Stopwatch';
 
+type DetailType = {
+  frameId?: number;
+  parentFrameId?: number;
+  url: string;
+  timestamp?: number;
+  statusCode?: number;
+  statusLine?: string;
+  method?: string;
+  ip?: string;
+  initiator?: string;
+  error?: string;
+};
 class Recording {
-  private data;
-  private events;
-  private stopwatch;
-  private chrome;
+  private data: any;
+  private events: any;
+  private stopwatch: Stopwatch;
 
-  STORAGE_ITEM = 'recording';
-  STORAGE_ITEM_PAGE_EVENTS = 'recording_pageEvents';
-  constructor(stopwatch) {
+  STORAGE_ITEM = 'recording' as const;
+  STORAGE_ITEM_PAGE_EVENTS = 'recording_pageEvents' as const;
+  constructor(stopwatch: Stopwatch) {
     this.stopwatch = stopwatch;
   }
 
@@ -39,7 +51,7 @@ class Recording {
     return this.stopwatch.ms / 1000;
   }
 
-  async addNavigationDetails(details) {
+  async addNavigationDetails(details: DetailType) {
     await this.init();
     const eventType =
       details.frameId === 0 && details.parentFrameId === -1
@@ -51,7 +63,7 @@ class Recording {
     });
   }
 
-  async addEvent(details) {
+  async addEvent(details: DetailType & { type: string }) {
     if (details.url.startsWith('http')) {
       this.events.push({
         id: uuidv4(),

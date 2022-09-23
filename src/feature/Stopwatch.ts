@@ -1,6 +1,6 @@
 class Stopwatch {
-  private startTime;
-  private elapsedTime;
+  private startTime: Date;
+  private elapsedTime: number;
   private running = false;
 
   get ms() {
@@ -25,7 +25,7 @@ class Stopwatch {
   }
 
   private getIntervalTime() {
-    return new Date() - this.startTime;
+    return new Date().getTime() - this.startTime.getTime();
   }
 
   public pause() {
