@@ -9,7 +9,7 @@ class MessageHandler {
   constructor(private chromeInstance: typeof chrome) {
     this.recordingManager = new Recording(new Stopwatch());
 
-    this.waitForCountdownFinished();
+    this.waitForInitialization();
     this.waitForScreenCaptureStart();
     this.waitForRecordingFinish();
     this.waitForSessionLinkable();
@@ -26,9 +26,9 @@ class MessageHandler {
     this.listenForConsoleDebug();
   }
 
-  public waitForCountdownFinished() {
-    this.onAlarm((alarm) => {
-      if (alarm.name === 'startRecordingCountDown') {
+  public waitForInitialization() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'startRecording') {
         this.recordingManager.start();
       }
     });
