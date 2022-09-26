@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import React, { useEffect, useState } from 'react';
 import { Recorder } from './feature/Recorder';
-import { getStorageItem, setStorageItem } from './storage';
+import { getStorageItem } from './storage';
 import { RecordingController } from './feature/RecordingController';
 
 const container = document.getElementById('recordingInterface');
@@ -30,14 +30,11 @@ const ScreenRecorder = () => {
   const [recordingStatus, setRecordingStatus] =
     useState<RecordingStatus>('stopped');
   const [audioStatus, setAudioStatus] = useState<AudioStatus>('inactive');
+
   const initRecordingSequence = async () => {
     try {
       const stream = await getVideoStream();
       initVideoPreview(stream);
-      stream.getVideoTracks()[0].onended = function () {
-        setStorageItem('recordingStatus', 'stopped');
-        //chrome.alarms.clear('startRecordingCountDown');
-      };
       const recorder = new Recorder(stream);
       if (audioStatus === 'active') {
         await recorder.addAudioTrack();

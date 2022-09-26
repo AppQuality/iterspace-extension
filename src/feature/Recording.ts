@@ -44,6 +44,7 @@ class Recording {
 
   stop() {
     this.stopwatch.stop();
+    setStorageItem('recordingStatus', 'stopped');
     return this.get();
   }
 
