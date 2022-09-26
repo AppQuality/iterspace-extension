@@ -25,6 +25,9 @@ class Stopwatch {
   }
 
   private getIntervalTime() {
+    if (!this.running) {
+      return 0;
+    }
     return new Date().getTime() - this.startTime.getTime();
   }
 
