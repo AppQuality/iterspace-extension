@@ -1,14 +1,17 @@
+import DomNode from './feature/DomNode';
+
 window.addEventListener('click', (event) => {
   if (!(event.target instanceof HTMLElement)) {
     return;
   }
+  const node = new DomNode(event.target);
   const message: MessageTypes = {
     type: 'iterspace:clickEvent',
     payload: {
-      targetString: domNodeToString(event.target),
-      targetTagName: event.target.tagName.toLowerCase(),
-      targetText: event.target.innerText,
-      targetAttributes: getDomNodeAttributes(event.target),
+      targetString: node.toString(),
+      targetTagName: node.tagName,
+      targetText: node.text,
+      targetAttributes: node.attributes,
       pageX: event.pageX,
       pageY: event.pageY,
       layerX: event.offsetX,
@@ -29,24 +32,3 @@ window.addEventListener('click', (event) => {
   };
   chrome.runtime.sendMessage(message);
 });
-
-const domNodeToString = (node: HTMLElement & { name?: string }) => {
-  const tagName = node.tagName.toLowerCase();
-  const { id, className, innerText: text } = node;
-  const nameString = node.name ? `name="${node.name}"` : '';
-  const idString = id ? `id="${id}"` : '';
-  const classNameString =
-    typeof className === 'string' ? `class="${className}"` : '';
-
-  const attributes = `${idString} ${classNameString} ${nameString}`.trim();
-  const attributesString = attributes ? ` ${attributes}` : '';
-  return `<${tagName}${attributesString}>${text || ''}</${tagName}>`;
-};
-
-const getDomNodeAttributes = (node: HTMLElement) => {
-  const attributes: { [key: string]: any } = {};
-  for (var i = 0; i < node.attributes.length; i++) {
-    attributes[node.attributes[i].name] = node.attributes[i].value;
-  }
-  return attributes;
-};
