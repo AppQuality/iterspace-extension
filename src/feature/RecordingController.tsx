@@ -1,4 +1,4 @@
-import { Button, MD, theme } from "@appquality/unguess-design-system";
+import { Button, MD } from "@appquality/unguess-design-system";
 import React, {useEffect, useState} from "react";
 import {getStorageItem, setStorageItem} from "../storage";
 import {ToggleAudioButton} from "./ToggleAudioButton";
@@ -54,7 +54,7 @@ export const RecordingController = () => {
       <StyledPopupHeader>
         <div className="header-left">
           <img alt="Iterspace" src={logoIcon} />
-          <MD className="title" isBold>Iterspace</MD>
+          <MD className="title" isBold>New screen recording</MD>
         </div>
         <div className="header-right">
           <img 
@@ -65,14 +65,15 @@ export const RecordingController = () => {
         </div>
       </StyledPopupHeader>
       <StyledPopupBody>
-        {micPermission === "denied" || micPermission === "prompt" &&
+        {micPermission === "denied" || micPermission === "prompt" ?
           <Button 
             className="generic-button"
             themeColor={palette.grey[900]}
             isStretched
           >
-              Attiva microfono
+            Activate Microphone
           </Button>
+          : <ToggleAudioButton audioStatus={audioStatus} />
         }
         <Button 
           className="generic-button"

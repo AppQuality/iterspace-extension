@@ -32,15 +32,16 @@ const ScreenRecorder = () => {
       initVideoPreview(stream);
       stream.getVideoTracks()[0].onended = function () {
         setStorageItem('recordingStatus', 'stopped');
-        chrome.alarms.clear('startRecordingCountDown');
+        //chrome.alarms.clear('startRecordingCountDown');
       };
       const recorder = new Recorder(stream);
       if (audioStatus === 'active') {
         await recorder.addAudioTrack();
       }
       setRecorder(recorder);
-      chrome.alarms.create("startRecordingCountDown", {when: Date.now() + 3000});
-      setStorageItem('recordingStatus', 'countDown')
+      //chrome.alarms.create("startRecordingCountDown", {when: Date.now() + 3000});
+      //setStorageItem('recordingStatus', 'countDown');
+      setStorageItem('recordingStatus', "recording");
     } catch (err) {
       /* handle the error */
       console.warn(err);

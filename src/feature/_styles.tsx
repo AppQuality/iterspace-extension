@@ -33,5 +33,8 @@ export const StyledPopupBody = styled.div`
     .recording-icon {
       margin-left: 8px;
     }
+    &:hover {
+      opacity: 0.7;
+    }
   }
 `;
