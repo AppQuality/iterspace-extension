@@ -1,11 +1,12 @@
 import {setStorageItem} from "../storage";
 import React, { useEffect, useState } from "react";
 import micActive from "./assets/micActive.svg";
-import { IconButton } from "@appquality/unguess-design-system";
+import { Field } from "@zendeskgarden/react-dropdowns";
+import { Dropdown, IconButton, Item, Menu, Select } from "@appquality/unguess-design-system";
 import { StyledManageAudio } from "./_styles";
 
 export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => {
-  const [tracks, setTracks] = useState<MediaStreamTrack[] | undefined>();
+  const [tracks, setTracks] = useState<MediaStreamTrack[]>([]);
 
   const activateAudio = () => {
     setStorageItem("audioStatus", "active");
@@ -38,5 +39,24 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
         : <img onClick={activateAudio} src={micActive} alt={"Unmute"} />
       }
     </IconButton>
+    {/* <Dropdown
+      selectedItem={tracks.length ? tracks[0] : undefined}
+      onSelect={(item: MediaStreamTrack) => {
+        console.log(item);
+      }}
+      downshiftProps={{ itemToString: (item: MediaStreamTrack) => item && item.label }}
+    >
+      <Field>
+        <Select>
+          {tracks.length ? tracks[0].label : ""}
+        </Select>
+      </Field>
+      <Menu
+      >
+        {tracks?.map((track) => (
+          <Item key={track.id} value={track.id}>{track.label}</Item>
+        ))}
+      </Menu>
+    </Dropdown> */}
   </StyledManageAudio>
 }
