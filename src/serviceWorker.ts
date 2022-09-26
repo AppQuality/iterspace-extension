@@ -48,6 +48,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 chrome.runtime.onMessage.addListener(async (message: MessageTypes) => {
+  console.log("internal", message)
   if (message.type === 'initScreenCapturing') {
     const controlTab = await getStorageItem('controlTab');
     if (!controlTab) {

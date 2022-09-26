@@ -12,6 +12,7 @@ module.exports = {
     record: './src/record.tsx',
     popup: './src/popup.tsx',
     blob: './src/getBlob.tsx',
+    meta: './src/getMeta.tsx',
   },
   module: {
     rules: [
