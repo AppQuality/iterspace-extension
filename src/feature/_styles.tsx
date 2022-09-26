@@ -38,3 +38,10 @@ export const StyledPopupBody = styled.div`
     }
   }
 `;
+
+export const StyledManageAudio = styled.div`
+  margin: 20px 0;
+  .audio-btn {
+    border-color: ${palette.grey[300]};
+  }
+`;

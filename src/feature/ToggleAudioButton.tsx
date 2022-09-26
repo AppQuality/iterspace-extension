@@ -1,5 +1,8 @@
 import {setStorageItem} from "../storage";
 import React from "react";
+import micActive from "./assets/micActive.svg";
+import { IconButton } from "@appquality/unguess-design-system";
+import { StyledManageAudio } from "./_styles";
 
 export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => {
   const activateAudio = () => {
@@ -8,11 +11,13 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
   const deactivateAudio = () => {
     setStorageItem("audioStatus", "inactive");
   }
-  if (audioStatus === 'inactive')
-    return <button onClick={activateAudio}>Unmute</button>
 
-  if (audioStatus === 'active')
-    return <button onClick={deactivateAudio}>Mute</button>
-
-  return null
+  return <StyledManageAudio>
+    <IconButton className="audio-btn" isBasic={false} isPill={false}>
+      {audioStatus === 'active'
+        ? <img onClick={deactivateAudio} src={micActive} alt={"Mute"}/>
+        : <img onClick={activateAudio} src={micActive} alt={"Unmute"} />
+      }
+    </IconButton>
+  </StyledManageAudio>
 }
