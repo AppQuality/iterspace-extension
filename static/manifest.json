@@ -9,21 +9,38 @@
   },
   "content_scripts": [
     {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["meta.js"]
+    },
+    {
       "matches": ["https://*/temporary/*", "http://*/temporary/*"],
       "js": ["blob.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "matches": ["https://*/*"],
+      "matches": ["<all_urls>"],
       "resources": ["record.html"]
+    },
+    {
+      "resources": ["consoleOverride.js"],
+      "matches": ["<all_urls>"]
     }
   ],
   "externally_connectable": {
     "matches": ["http://localhost/*"]
   },
 
-  "permissions": ["storage", "scripting", "desktopCapture", "activeTab", "tabs", "alarms"],
+  "permissions": [
+    "storage",
+    "scripting",
+    "desktopCapture",
+    "activeTab",
+    "tabs",
+    "alarms",
+    "webNavigation",
+    "webRequest"
+  ],
   "action": {
     "default_title": "Iterspace Browser Extension",
     "default_popup": "popup.html",

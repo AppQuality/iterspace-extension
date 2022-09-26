@@ -54,7 +54,10 @@
     "react-dom": "^18.2.0",
     "style-loader": "^3.3.1",
     "styled-components": "^5.3.3",
-    "ts-ebml": "^2.0.2"
+    "ts-ebml": "^2.0.2",
+    "buffer": "^6.0.3",
+    "get-blob-duration": "^1.2.0",
+    "uuid": "^9.0.0"
   },
   "browserslist": [
     "> 0.25%, not dead"
