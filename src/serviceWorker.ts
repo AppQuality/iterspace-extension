@@ -1,26 +1,21 @@
 import { initializeStorageWithDefaults } from './storage';
 
-// Log storage changes, might be safely removed
-chrome.storage.onChanged.addListener((changes) => {
-  for (const [key, value] of Object.entries(changes)) {
-    console.log(
-      `"${key}" changed from "${value.oldValue}" to "${value.newValue}"`,
-    );
-  }
-});
+import MessageHandler from './feature/MessageHandler';
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   console.log('onInstalled listener triggered. Reason:', reason);
   await initializeStorageWithDefaults({
-    isRecording:false
+    recordingStatus: 'stopped',
+    audioStatus: 'inactive',
   });
-  if (reason === "install") {
+  if (reason === 'install') {
     await chrome.tabs.create({
       url: process.env.WELCOME_PAGE,
-    })
+    });
     if (chrome.runtime.setUninstallURL) {
-      chrome.runtime.setUninstallURL(process.env.GOODBYE_PAGE)
+      chrome.runtime.setUninstallURL(process.env.GOODBYE_PAGE);
     }
   }
-  console.log('Extension successfully installed!');
-})
+});
+
+new MessageHandler(chrome);

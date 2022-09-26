@@ -1,5 +1,6 @@
 const path = require('path');
 
+const webpack = require('webpack');
 const DotenvPlugin = require('dotenv-webpack');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -8,8 +9,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     serviceWorker: './src/serviceWorker.ts',
-    contentScript: './src/contentScript.ts',
+    record: './src/record.tsx',
     popup: './src/popup.tsx',
+    blob: './src/getBlob.tsx',
+    meta: './src/getMeta.tsx',
+    consoleOverride: './src/consoleOverride.ts',
   },
   module: {
     rules: [
@@ -17,11 +21,14 @@ module.exports = {
         test: /\.(js|ts)x?$/,
         use: ['babel-loader'],
         exclude: /node_modules/,
-      }
+      },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+    },
   },
   output: {
     filename: '[name].js',
@@ -30,6 +37,9 @@ module.exports = {
   },
   plugins: [
     new DotenvPlugin(),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new ESLintPlugin({
       extensions: ['js', 'ts'],
       overrideConfigFile: path.resolve(__dirname, '.eslintrc'),

@@ -1,20 +1,16 @@
-export interface Storage {
-  isRecording: boolean,
-}
-
-export function getStorageData(): Promise<Storage> {
+export function getStorageData(): Promise<ExtensionStorage> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get(null, (result) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
 
-      return resolve(result as Storage);
+      return resolve(result as ExtensionStorage);
     });
   });
 }
 
-export function setStorageData(data: Storage): Promise<void> {
+export function setStorageData(data: ExtensionStorage): Promise<void> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.set(data, () => {
       if (chrome.runtime.lastError) {
@@ -26,23 +22,23 @@ export function setStorageData(data: Storage): Promise<void> {
   });
 }
 
-export function getStorageItem<Key extends keyof Storage>(
+export function getStorageItem<Key extends keyof ExtensionStorage>(
   key: Key,
-): Promise<Storage[Key]> {
+): Promise<ExtensionStorage[Key]> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get([key], (result) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
 
-      return resolve((result as Storage)[key]);
+      return resolve((result as ExtensionStorage)[key]);
     });
   });
 }
 
-export function setStorageItem<Key extends keyof Storage>(
+export function setStorageItem<Key extends keyof ExtensionStorage>(
   key: Key,
-  value: Storage[Key],
+  value: ExtensionStorage[Key],
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.set({ [key]: value }, () => {
@@ -55,7 +51,7 @@ export function setStorageItem<Key extends keyof Storage>(
   });
 }
 
-export async function initializeStorageWithDefaults(defaults: Storage) {
+export async function initializeStorageWithDefaults(defaults: ExtensionStorage) {
   const currentStorageData = await getStorageData();
   const newStorageData = Object.assign({}, defaults, currentStorageData);
   await setStorageData(newStorageData);
