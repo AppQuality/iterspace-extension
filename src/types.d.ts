@@ -15,7 +15,12 @@ type MessageTypes = {
     | 'initScreenCapturing'
     | 'activateAudio'
     | 'deactivateAudio'
-    | 'iterspace:clickEvent';
+    | 'iterspace:clickEvent'
+    | 'iterspace:consoleLog'
+    | 'iterspace:consoleWarn'
+    | 'iterspace:consoleInfo'
+    | 'iterspace:consoleError'
+    | 'iterspace:consoleDebug';
   payload?: any;
 };
 

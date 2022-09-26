@@ -13,6 +13,7 @@ module.exports = {
     popup: './src/popup.tsx',
     blob: './src/getBlob.tsx',
     meta: './src/getMeta.tsx',
+    consoleOverride: './src/consoleOverride.ts',
   },
   module: {
     rules: [

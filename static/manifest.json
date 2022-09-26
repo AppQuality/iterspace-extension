@@ -19,8 +19,12 @@
   ],
   "web_accessible_resources": [
     {
-      "matches": ["https://*/*"],
+      "matches": ["<all_urls>"],
       "resources": ["record.html"]
+    },
+    {
+      "resources": ["consoleOverride.js"],
+      "matches": ["<all_urls>"]
     }
   ],
   "externally_connectable": {

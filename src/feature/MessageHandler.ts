@@ -18,6 +18,12 @@ class MessageHandler {
     this.listenForWebRequestEvent();
     this.listenForWebRequestErrorEvent();
     this.listenForClickEvent();
+
+    this.listenForConsoleLog();
+    this.listenForConsoleWarn();
+    this.listenForConsoleError();
+    this.listenForConsoleInfo();
+    this.listenForConsoleDebug();
   }
 
   public waitForCountdownFinished() {
@@ -127,6 +133,61 @@ class MessageHandler {
           type: 'click',
           data: message.payload,
           timestamp: Math.round(new Date().getTime() / 1000),
+          url: message.payload.url,
+        });
+      }
+    });
+  }
+
+  public listenForConsoleLog() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:consoleLog' && message.payload) {
+        await this.recordingManager.addConsoleLogEvent({
+          data: message.payload,
+          url: message.payload.url,
+        });
+      }
+    });
+  }
+
+  public listenForConsoleWarn() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:consoleWarn' && message.payload) {
+        await this.recordingManager.addConsoleWarnEvent({
+          data: message.payload,
+          url: message.payload.url,
+        });
+      }
+    });
+  }
+
+  public listenForConsoleError() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:consoleError' && message.payload) {
+        await this.recordingManager.addConsoleErrorEvent({
+          data: message.payload,
+          url: message.payload.url,
+        });
+      }
+    });
+  }
+
+  public listenForConsoleInfo() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:consoleInfo' && message.payload) {
+        await this.recordingManager.addConsoleInfoEvent({
+          data: message.payload,
+          url: message.payload.url,
+        });
+      }
+    });
+  }
+
+  public listenForConsoleDebug() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:consoleDebug' && message.payload) {
+        await this.recordingManager.addConsoleDebugEvent({
+          data: message.payload,
           url: message.payload.url,
         });
       }

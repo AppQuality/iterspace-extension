@@ -86,7 +86,8 @@ class Recording {
     type: string;
     url: string;
     timestamp?: number;
-    data: any;
+    values?: any;
+    data?: any;
   }) {
     this.events.push({
       id: uuidv4(),
@@ -95,6 +96,7 @@ class Recording {
       timestamp: event.timestamp ? Math.round(event.timestamp / 1000) : 0,
       data: event.data,
       videoTime: this.getCurrentVideoTime(),
+      values: event.values,
     });
     await this.save();
   }
@@ -105,6 +107,39 @@ class Recording {
       data: clickEvent,
       timestamp: Math.round(new Date().getTime() / 1000),
       url: clickEvent.url,
+    });
+  }
+
+  async addConsoleLogEvent(event: any) {
+    await this.addConsoleEvent('consoleLog', event);
+  }
+  async addConsoleWarnEvent(event: any) {
+    await this.addConsoleEvent('consoleWarn', event);
+  }
+  async addConsoleDebugEvent(event: any) {
+    await this.addConsoleEvent('consoleDebug', event);
+  }
+  async addConsoleErrorEvent(event: any) {
+    await this.addConsoleEvent('consoleError', event);
+  }
+  async addConsoleInfoEvent(event: any) {
+    await this.addConsoleEvent('consoleInfo', event);
+  }
+
+  async addConsoleEvent(
+    type:
+      | 'consoleLog'
+      | 'consoleDebug'
+      | 'consoleError'
+      | 'consoleInfo'
+      | 'consoleWarn',
+    event: any,
+  ) {
+    this.addEvent({
+      type: type,
+      url: event.url,
+      values: event.data.values,
+      timestamp: Math.round(new Date().getTime() / 1000),
     });
   }
 

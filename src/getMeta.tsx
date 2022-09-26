@@ -32,3 +32,19 @@ window.addEventListener('click', (event) => {
   };
   chrome.runtime.sendMessage(message);
 });
+
+var s = document.createElement('script');
+s.src = chrome.runtime.getURL('consoleOverride.js');
+s.onload = function () {
+  //@ts-ignore
+  this.remove();
+};
+(document.head || document.documentElement).appendChild(s);
+
+window.addEventListener(
+  'iterspaceExtensionConsoleMessage',
+  function (event: CustomEvent) {
+    chrome.runtime.sendMessage(event.detail);
+  },
+  false,
+);
