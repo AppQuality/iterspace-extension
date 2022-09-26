@@ -37,6 +37,7 @@ const sendConsoleMessage = (type: MessageTypes['type'], args: any) => {
   }
 };
 
+/* eslint-disable  @typescript-eslint/ban-types */
 const sanitizeObjects = (args: (Function | Object | number | string)[]) =>
   args.map((el) => {
     if (typeof el === 'function') {
