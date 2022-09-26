@@ -17,6 +17,7 @@ class MessageHandler {
     this.listenForNavigationEvent();
     this.listenForWebRequestEvent();
     this.listenForWebRequestErrorEvent();
+    this.listenForClickEvent();
   }
 
   public waitForCountdownFinished() {
@@ -91,7 +92,7 @@ class MessageHandler {
     this.chromeInstance.webRequest.onCompleted.addListener(
       async (details) => {
         if (await this.isCurrentTab(details.tabId)) {
-          await this.recordingManager.addEvent({
+          await this.recordingManager.addDetailsEvent({
             ...details,
             type: 'webRequest',
           });
@@ -107,7 +108,7 @@ class MessageHandler {
     this.chromeInstance.webRequest.onErrorOccurred.addListener(
       async (details) => {
         if (await this.isCurrentTab(details.tabId)) {
-          await this.recordingManager.addEvent({
+          await this.recordingManager.addDetailsEvent({
             ...details,
             type: 'webErrorRequest',
           });
@@ -120,11 +121,16 @@ class MessageHandler {
   }
 
   public listenForClickEvent() {
-    this.chromeInstance.runtime.onMessage.addListener(
-      async (message: MessageTypes) => {
-        console.log('internal', message);
-      },
-    );
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:clickEvent' && message.payload) {
+        await this.recordingManager.addEvent({
+          type: 'click',
+          data: message.payload,
+          timestamp: Math.round(new Date().getTime() / 1000),
+          url: message.payload.url,
+        });
+      }
+    });
   }
 
   private onAlarm(callback: (alarm: chrome.alarms.Alarm) => void) {

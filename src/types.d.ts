@@ -14,7 +14,9 @@ type MessageTypes = {
     | 'pauseRecording'
     | 'initScreenCapturing'
     | 'activateAudio'
-    | 'deactivateAudio';
+    | 'deactivateAudio'
+    | 'iterspace:clickEvent';
+  payload?: any;
 };
 
 type RecordingStatus =

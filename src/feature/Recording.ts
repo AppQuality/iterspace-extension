@@ -57,20 +57,18 @@ class Recording {
       details.frameId === 0 && details.parentFrameId === -1
         ? 'navigation'
         : 'webRequest';
-    await this.addEvent({
+    await this.addDetailsEvent({
       ...details,
       type: eventType,
     });
   }
 
-  async addEvent(details: DetailType & { type: string }) {
+  async addDetailsEvent(details: DetailType & { type: string }) {
     if (details.url.startsWith('http')) {
-      this.events.push({
-        id: uuidv4(),
+      await this.addEvent({
         type: details.type,
         url: details.url,
-        timestamp: details.timestamp ? Math.round(details.timestamp / 1000) : 0,
-        videoTime: this.getCurrentVideoTime(),
+        timestamp: details.timestamp,
         data: {
           statusCode: details.statusCode,
           statusLine: details.statusLine,
@@ -81,8 +79,33 @@ class Recording {
           error: details.error,
         },
       });
-      await this.save();
     }
+  }
+
+  async addEvent(event: {
+    type: string;
+    url: string;
+    timestamp?: number;
+    data: any;
+  }) {
+    this.events.push({
+      id: uuidv4(),
+      type: event.type,
+      url: event.url,
+      timestamp: event.timestamp ? Math.round(event.timestamp / 1000) : 0,
+      data: event.data,
+      videoTime: this.getCurrentVideoTime(),
+    });
+    await this.save();
+  }
+
+  async addClickEvent(clickEvent: any) {
+    await this.addEvent({
+      type: 'click',
+      data: clickEvent,
+      timestamp: Math.round(new Date().getTime() / 1000),
+      url: clickEvent.url,
+    });
   }
 
   async save() {
