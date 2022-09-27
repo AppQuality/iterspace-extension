@@ -39,7 +39,7 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
         : <img onClick={activateAudio} src={micActive} alt={"Unmute"} />
       }
     </IconButton>
-    {/* <Dropdown
+    <Dropdown
       selectedItem={tracks.length ? tracks[0] : undefined}
       onSelect={(item: MediaStreamTrack) => {
         console.log(item);
@@ -57,6 +57,6 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
           <Item key={track.id} value={track.id}>{track.label}</Item>
         ))}
       </Menu>
-    </Dropdown> */}
+    </Dropdown>
   </StyledManageAudio>
 }
