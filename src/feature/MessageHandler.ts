@@ -248,6 +248,11 @@ class MessageHandler {
   }
 
   private async openControlTab() {
+    try {
+      await chrome.tabs.get(this.controlTabId);
+    } catch (e) {
+      this.controlTabId = undefined;
+    }
     if (!this.controlTabId) {
       const newTab = await chrome.tabs.create({
         active: true,
