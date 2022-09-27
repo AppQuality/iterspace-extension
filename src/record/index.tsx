@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 import React, { useRef } from 'react';
 import { RecordingController } from '../feature/RecordingController';
 import useRecorder from './useRecorder';
+import { ThemeProvider } from '@zendeskgarden/react-theming';
+import { theme } from '@appquality/unguess-design-system';
 
 const container = document.getElementById('recordingInterface');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
@@ -15,7 +17,7 @@ const ScreenRecorder = () => {
   });
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <p>Controls</p>
       <video
         autoPlay={true}
@@ -26,7 +28,7 @@ const ScreenRecorder = () => {
         ref={videoPreview}
       ></video>
       <RecordingController />
-    </div>
+    </ThemeProvider>
   );
 };
 
