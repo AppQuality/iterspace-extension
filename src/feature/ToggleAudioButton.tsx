@@ -23,7 +23,8 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
       }, video: false
     });
     setTracks(audioStream.getAudioTracks());
-  }
+    audioStream.getTracks().forEach((track) => track.stop());
+  };
 
   const onChangeAudioTrack = () => {
     // TODO
