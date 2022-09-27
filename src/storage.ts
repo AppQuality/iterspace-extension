@@ -1,6 +1,6 @@
 export function getStorageData(): Promise<ExtensionStorage> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(null, (result) => {
+    chrome.storage.local.get(null, (result) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
@@ -12,7 +12,7 @@ export function getStorageData(): Promise<ExtensionStorage> {
 
 export function setStorageData(data: ExtensionStorage): Promise<void> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.set(data, () => {
+    chrome.storage.local.set(data, () => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
@@ -26,7 +26,7 @@ export function getStorageItem<Key extends keyof ExtensionStorage>(
   key: Key,
 ): Promise<ExtensionStorage[Key]> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get([key], (result) => {
+    chrome.storage.local.get([key], (result) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
@@ -41,7 +41,7 @@ export function setStorageItem<Key extends keyof ExtensionStorage>(
   value: ExtensionStorage[Key],
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.set({ [key]: value }, () => {
+    chrome.storage.local.set({ [key]: value }, () => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
@@ -51,7 +51,9 @@ export function setStorageItem<Key extends keyof ExtensionStorage>(
   });
 }
 
-export async function initializeStorageWithDefaults(defaults: ExtensionStorage) {
+export async function initializeStorageWithDefaults(
+  defaults: ExtensionStorage,
+) {
   const currentStorageData = await getStorageData();
   const newStorageData = Object.assign({}, defaults, currentStorageData);
   await setStorageData(newStorageData);
