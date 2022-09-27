@@ -9,7 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     serviceWorker: './src/serviceWorker.ts',
-    record: './src/record.tsx',
+    record: './src/record/index.tsx',
     popup: './src/popup.tsx',
     blob: './src/getBlob.tsx',
     meta: './src/getMeta.tsx',
