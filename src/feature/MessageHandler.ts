@@ -10,6 +10,7 @@ class MessageHandler {
     this.recordingManager = new Recording(new Stopwatch());
 
     this.waitForInitialization();
+    this.waitForAbort();
     this.waitForScreenCaptureStart();
     this.waitForRecordingFinish();
     this.waitForSessionLinkable();
@@ -30,6 +31,15 @@ class MessageHandler {
     this.onInternalMessage(async (message: MessageTypes) => {
       if (message.type === 'startRecording') {
         this.recordingManager.start();
+      }
+    });
+  }
+
+  public waitForAbort() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'abortRecording') {
+        this.recordingManager.stop();
+        setStorageItem('recordingStatus', 'stopped');
       }
     });
   }
