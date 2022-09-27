@@ -1,6 +1,6 @@
 import { Decoder, Reader, tools } from 'ts-ebml';
 import { v4 as uuidv4 } from 'uuid';
-import { setStorageItem } from '../storage';
+import { getStorageItem, setStorageItem } from '../storage';
 import getBlobDuration from 'get-blob-duration';
 
 export class Recorder {
@@ -10,11 +10,31 @@ export class Recorder {
   recordedChunks: Blob[];
   mediaRecorder: MediaRecorder;
 
-  constructor(stream: MediaStream) {
-    this.stream = stream;
+  constructor() {
     this.id = uuidv4();
     this.options = { mimeType: 'video/webm; codecs=h264' };
     this.recordedChunks = [];
+  }
+
+  async initRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+      });
+      this.stream = stream;
+      const audio = await getStorageItem('audioStatus');
+      if (audio === 'active') {
+        await this.addAudioTrack();
+      }
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'startRecording' });
+    } catch (err) {
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'abortRecording' });
+    }
+  }
+
+  getStream() {
+    return this.stream;
   }
 
   startRecording() {
