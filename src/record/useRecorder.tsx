@@ -13,12 +13,22 @@ const useRecorder = ({
   const { audioStatus } = useAudioStatus();
 
   const initRecordingSequence = async () => {
-    const recorder = new Recorder();
-    await recorder.initRecording();
-    onChanged(recorder.getStream());
-    setRecorder(recorder);
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+      });
+      onChanged(stream);
+      const recorder = new Recorder(stream);
+      if (audioStatus === 'active') {
+        await recorder.addAudioTrack();
+      }
+      setRecorder(recorder);
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'startRecording' });
+    } catch (err) {
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'abortRecording' });
+    }
   };
-
   useEffect(() => {
     if (recordingStatus === 'initScreenCapturing') {
       initRecordingSequence();
