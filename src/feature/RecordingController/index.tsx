@@ -1,55 +1,19 @@
 import { Button, MD } from '@appquality/unguess-design-system';
-import React, { useEffect, useState } from 'react';
-import { getStorageItem, setStorageItem } from '../../storage';
+import React from 'react';
 import { ToggleAudioButton } from '../ToggleAudioButton';
 import logoIcon from '../assets/logo.svg';
 import recordingIcon from '../assets/iconLeft.svg';
 import closeButton from '../assets/closeButton.svg';
 import { StyledPopupBody, StyledPopupHeader } from '../_styles';
 import { palette } from '../../theme/palette';
+import useRecordingStatus from './useRecordingStatus';
+import useAudioStatus from './useAudioStatus';
 
 export const RecordingController = () => {
-  const [recordingStatus, setRecordingStatus] =
-    useState<RecordingStatus>('stopped');
-  const [micPermission, setMicPermission] = useState<PermissionState>('denied');
-  const [audioStatus, setAudioStatus] = useState<AudioStatus>('inactive');
-  useEffect(() => {
-    const getInitialRecordingValue = async () => {
-      const recording = await getStorageItem('recordingStatus');
-      const audio = await getStorageItem('audioStatus');
-      setRecordingStatus(recording);
-      setAudioStatus(audio);
-    };
-    const getMicrophonePermissions = async () => {
-      const response = await window.navigator.permissions.query({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        name: 'microphone',
-      });
-      setMicPermission(response.state);
-    };
-    getInitialRecordingValue();
-    getMicrophonePermissions();
-    chrome.storage.onChanged.addListener((changes) => {
-      for (const [key, value] of Object.entries(changes)) {
-        if (key === 'recordingStatus') {
-          setRecordingStatus(value.newValue);
-        }
-        if (key === 'audioStatus') {
-          setAudioStatus(value.newValue);
-        }
-      }
-    });
-  }, []);
-  const startRecording = () => {
-    chrome.runtime.sendMessage<MessageTypes>({ type: 'initScreenCapturing' });
-  };
-  const stopRecording = () => {
-    setStorageItem('recordingStatus', 'stopped');
-  };
-  const pauseRecording = () => {
-    setStorageItem('recordingStatus', 'paused');
-  };
+  const { recordingStatus, startRecording, stopRecording } =
+    useRecordingStatus();
+  const { audioStatus, micPermission } = useAudioStatus();
+
   return (
     <div>
       <StyledPopupHeader>
