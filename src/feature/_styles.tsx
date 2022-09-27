@@ -45,11 +45,20 @@ export const StyledManageAudio = styled.div`
   display: flex;
 
   .audio-btn {
-    width: 15%;
     border-color: ${palette.grey[300]};
     margin-right: 8px;
+    &:focus {
+      border: none;
+      box-shadow: 0 0 0 3px ${palette.green[100]};
+    }
   }
   .select-field {
-    width: 85%;
+    width: 277px;
+    .select-input {
+      box-shadow: none;
+      &:focus {
+        box-shadow: 0 0 0 3px ${palette.secondary[200]};
+      }
+    }
   }
 `;
