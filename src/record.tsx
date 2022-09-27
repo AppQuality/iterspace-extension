@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import React, { useEffect, useState } from 'react';
 import { Recorder } from './feature/Recorder';
-import { getStorageItem } from './storage';
 import { RecordingController } from './feature/RecordingController';
+import useRecordingStatus from './feature/RecordingController/useRecordingStatus';
+import useAudioStatus from './feature/RecordingController/useAudioStatus';
 
 const container = document.getElementById('recordingInterface');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
@@ -27,9 +28,8 @@ const initVideoPreview = (videoStream: MediaStream) => {
 
 const ScreenRecorder = () => {
   const [recorder, setRecorder] = useState<Recorder>(null);
-  const [recordingStatus, setRecordingStatus] =
-    useState<RecordingStatus>('stopped');
-  const [audioStatus, setAudioStatus] = useState<AudioStatus>('inactive');
+  const { recordingStatus } = useRecordingStatus();
+  const { audioStatus } = useAudioStatus();
 
   const initRecordingSequence = async () => {
     try {
@@ -43,30 +43,8 @@ const ScreenRecorder = () => {
       chrome.runtime.sendMessage<MessageTypes>({ type: 'startRecording' });
     } catch (err) {
       chrome.runtime.sendMessage<MessageTypes>({ type: 'abortRecording' });
-      /* handle the error */
-      console.warn(err);
     }
   };
-
-  useEffect(() => {
-    const getInitialRecordingValue = async () => {
-      const recording = await getStorageItem('recordingStatus');
-      const audio = await getStorageItem('audioStatus');
-      setRecordingStatus(recording);
-      setAudioStatus(audio);
-    };
-    getInitialRecordingValue();
-    chrome.storage.onChanged.addListener((changes) => {
-      for (const [key, value] of Object.entries(changes)) {
-        if (key === 'recordingStatus') {
-          setRecordingStatus(value.newValue);
-        }
-        if (key === 'audioStatus') {
-          setAudioStatus(value.newValue);
-        }
-      }
-    });
-  }, []);
 
   useEffect(() => {
     if (recordingStatus === 'initScreenCapturing') {
