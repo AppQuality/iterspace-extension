@@ -46,7 +46,7 @@ export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => 
       }}
       downshiftProps={{ itemToString: (item: MediaStreamTrack) => item && item.label }}
     >
-      <Field>
+      <Field className="select-field">
         <Select>
           {tracks.length ? tracks[0].label : ""}
         </Select>

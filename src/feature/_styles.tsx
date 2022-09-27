@@ -27,6 +27,7 @@ export const StyledPopupHeader = styled.div`
 
 export const StyledPopupBody = styled.div`
   padding: 0 40px;
+  width: 405px;
 
   .generic-button {
     margin: 20px 0;
@@ -41,7 +42,14 @@ export const StyledPopupBody = styled.div`
 
 export const StyledManageAudio = styled.div`
   margin: 20px 0;
+  display: flex;
+
   .audio-btn {
+    width: 15%;
     border-color: ${palette.grey[300]};
+    margin-right: 8px;
+  }
+  .select-field {
+    width: 85%;
   }
 `;
