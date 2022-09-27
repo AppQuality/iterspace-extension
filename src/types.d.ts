@@ -9,6 +9,7 @@ type ExtensionStorage = {
 type MessageTypes = {
   type:
     | 'startRecording'
+    | 'abortRecording'
     | 'stopRecording'
     | 'initCountDown'
     | 'pauseRecording'

@@ -42,6 +42,7 @@ const ScreenRecorder = () => {
       setRecorder(recorder);
       chrome.runtime.sendMessage<MessageTypes>({ type: 'startRecording' });
     } catch (err) {
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'abortRecording' });
       /* handle the error */
       console.warn(err);
     }
