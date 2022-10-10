@@ -40,13 +40,18 @@ const sendConsoleMessage = (type: MessageTypes['type'], args: any) => {
 /* eslint-disable  @typescript-eslint/ban-types */
 const sanitizeObjects = (args: (Function | Object | number | string)[]) =>
   args.map((el) => {
-    if (typeof el === 'function') {
-      return `ƒ ${el.name}()`;
+    if (el) {
+      if (typeof el === 'function') {
+        return `ƒ ${el.name}()`;
+      }
+      if (typeof el === 'object') {
+        return JSON.stringify(el);
+      }
+      if (typeof el.toString === 'function') {
+        return el.toString();
+      }
     }
-    if (typeof el === 'object') {
-      return JSON.stringify(el);
-    }
-    return el.toString();
+    return '';
   });
 
 let lastEvent: null | any = null;
