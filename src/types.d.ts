@@ -4,6 +4,7 @@ type ExtensionStorage = {
   audioStatus: AudioStatus;
   recording?: object;
   recording_pageEvents?: any[];
+  audioDeviceId: string;
 };
 
 type MessageTypes = {

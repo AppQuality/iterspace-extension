@@ -1,70 +1,87 @@
-import {setStorageItem} from "../storage";
-import React, { useEffect, useState } from "react";
-import micOn from "./assets/micOn.svg";
-import micOff from "./assets/micOff.svg";
-import { Field } from "@zendeskgarden/react-dropdowns";
-import { Dropdown, IconButton, Item, Menu, Select } from "@appquality/unguess-design-system";
-import { StyledManageAudio } from "./_styles";
+import React, { useEffect, useState } from 'react';
+import micOn from './assets/micOn.svg';
+import micOff from './assets/micOff.svg';
+import { Field } from '@zendeskgarden/react-dropdowns';
+import {
+  Dropdown,
+  IconButton,
+  Item,
+  Menu,
+  Select,
+} from '@appquality/unguess-design-system';
+import { StyledManageAudio } from './_styles';
+import Microphone from './Microphone';
 
-export const ToggleAudioButton = ({audioStatus}: {audioStatus: AudioStatus}) => {
-  const [tracks, setTracks] = useState<MediaStreamTrack[]>([]);
-
-  const activateAudio = () => {
-    setStorageItem("audioStatus", "active");
-  }
-  const deactivateAudio = () => {
-    setStorageItem("audioStatus", "inactive");
-  }
-
-  const getAudioStream = async () => {
-    const audioStream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: true
-      }, video: false
-    });
-    setTracks(audioStream.getAudioTracks());
-    audioStream.getTracks().forEach((track) => track.stop());
-  };
-
-  const onChangeAudioTrack = () => {
-    // TODO
-  }
+export const ToggleAudioButton = ({}: {}) => {
+  const [microphone, setMicrophone] = useState<Microphone>(new Microphone());
+  const [ready, setReady] = useState<boolean>(false);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string>();
 
   useEffect(() => {
-    getAudioStream();
+    microphone.init().then(() => {
+      setReady(microphone.ready());
+      setMicrophone(microphone);
+    });
   }, []);
-  
-  return <StyledManageAudio>
-    <IconButton 
-      className="audio-btn" 
-      isBasic={false} 
-      isPill={false}
-      onClick={audioStatus === 'active' 
-        ? deactivateAudio : activateAudio}
-    >
-      <img 
-        src={audioStatus === 'active' ? micOn : micOff} 
-        alt={"Mute/Unmute"}
-      />
-    </IconButton>
+
+  if (!ready) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <StyledManageAudio>
+      <IconButton
+        className="audio-btn"
+        isBasic={false}
+        isPill={false}
+        onClick={() => microphone.toggleAudio()}
+      >
+        <img
+          src={microphone.isAudioActive() ? micOn : micOff}
+          alt={'Mute/Unmute'}
+        />
+      </IconButton>
+      <DeviceInputSelect microphone={microphone} />
+    </StyledManageAudio>
+  );
+};
+
+const DeviceInputSelect = ({ microphone }: { microphone: Microphone }) => {
+  const [selectedDevice, setSelectedDevice] = useState<InputDeviceInfo>();
+  if (!microphone.ready()) {
+    return <div>Loading...</div>;
+  }
+  const tracks = microphone.getTracks();
+  useEffect(() => {
+    setSelectedDevice(
+      tracks.find((t) => t.deviceId === microphone.getSelectedInput()),
+    );
+  }, []);
+
+  return (
     <Dropdown
-      selectedItem={tracks.length ? tracks[0] : undefined}
-      onSelect={(item: MediaStreamTrack) => {
-        console.log(item);
+      selectedItem={selectedDevice?.deviceId}
+      onSelect={(item: string) => {
+        const track = tracks.find((t) => t.deviceId === item);
+        if (track) {
+          microphone.setSelectedInput(track.deviceId);
+          setSelectedDevice(track);
+        }
       }}
-      downshiftProps={{ itemToString: (item: MediaStreamTrack) => item && item.label }}
+      downshiftProps={{
+        itemToString: (item: InputDeviceInfo) => item,
+      }}
     >
       <Field className="select-field">
-        <Select className="select-input">
-          {tracks.length ? tracks[0].label : ""}
-        </Select>
+        <Select className="select-input">{selectedDevice?.label}</Select>
       </Field>
-      <Menu
-      >
+      <Menu>
         {tracks?.map((track) => (
-          <Item key={track.id} value={track.id}>{track.label}</Item>
+          <Item key={track.deviceId} value={track.deviceId}>
+            {track.label}
+          </Item>
         ))}
       </Menu>
     </Dropdown>
-  </StyledManageAudio>
-}
+  );
+};

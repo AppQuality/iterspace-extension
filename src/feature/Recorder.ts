@@ -2,6 +2,7 @@ import { Decoder, Reader, tools } from 'ts-ebml';
 import { v4 as uuidv4 } from 'uuid';
 import { setStorageItem } from '../storage';
 import getBlobDuration from 'get-blob-duration';
+import Microphone from './Microphone';
 
 export class Recorder {
   id: string;
@@ -55,23 +56,21 @@ export class Recorder {
   }
   async muteAudioTrack() {
     this.stream.getAudioTracks().forEach((track) => {
-      console.log('mute audio', track);
       track.enabled = false;
     });
   }
   async unmuteAudioTrack() {
     this.stream.getAudioTracks().forEach((track) => {
-      console.log('mute audio', track);
       track.enabled = true;
     });
   }
   async getAudioStream() {
-    return await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: true,
-      },
-      video: false,
-    });
+    const microphone = new Microphone();
+    await microphone.init();
+    if (!microphone.ready()) {
+      throw new Error('microphone is not ready');
+    }
+    return microphone.getStream();
   }
   async readAsArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
@@ -104,8 +103,6 @@ export class Recorder {
       reader.read(elm);
     });
     const duration = await getBlobDuration(webmBlob);
-
-    console.log(duration);
 
     const refinedMetadataBuf = tools.makeMetadataSeekable(
       reader.metadatas,

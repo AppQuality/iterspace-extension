@@ -12,7 +12,7 @@ import useAudioStatus from './useAudioStatus';
 export const RecordingController = () => {
   const { recordingStatus, startRecording, stopRecording } =
     useRecordingStatus();
-  const { audioStatus, micPermission } = useAudioStatus();
+  const { micPermission } = useAudioStatus();
 
   return (
     <div>
@@ -37,7 +37,7 @@ export const RecordingController = () => {
             Activate Microphone
           </Button>
         ) : (
-          <ToggleAudioButton audioStatus={audioStatus} />
+          <ToggleAudioButton />
         )}
         <Button
           className="generic-button"
@@ -55,33 +55,5 @@ export const RecordingController = () => {
         </Button>
       </StyledPopupBody>
     </div>
-    // <div>
-    //   <p>Capture Screen</p>
-    //   {recordingStatus === "recording" &&
-    //   <>
-    //     <button onClick={stopRecording}>stop</button> <button onClick={pauseRecording}>pause</button>
-    //   </>
-    //   }
-    //   {recordingStatus === "stopped" && <button onClick={startRecording}>start</button>}
-    //   {recordingStatus === "countDown" &&
-    //   <>
-    //     <span>starting 3.. 2.. 1..</span> <button onClick={stopRecording}>stop</button>
-    //   </>
-    //   }
-    //   {recordingStatus === "initScreenCapturing" &&
-    //   <>
-    //     <span>waiting</span> <button onClick={stopRecording}>stop</button>
-    //   </>
-    //   }
-    //   <div>
-    //     <p>Audio</p>
-    //     {micPermission === "denied"
-    //      ? <>
-    //          <button disabled>mic denied</button>
-    //        </>
-    //      : <ToggleAudioButton audioStatus={audioStatus} />
-    //     }
-    //   </div>
-    // </div>
   );
 };
