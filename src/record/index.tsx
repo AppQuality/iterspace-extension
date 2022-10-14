@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import React, { useRef } from 'react';
-import { RecordingController } from '../feature/RecordingController';
 import useRecorder from './useRecorder';
 import { ThemeProvider } from '@zendeskgarden/react-theming';
-import { theme } from '@appquality/unguess-design-system';
+import { theme, MD, XXL } from '@appquality/unguess-design-system';
+import logo from './assets/logo.svg';
+import { StyledScreenRecorder } from './_styles';
 
 const container = document.getElementById('recordingInterface');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
@@ -18,16 +19,26 @@ const ScreenRecorder = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <p>Controls</p>
-      <video
-        autoPlay={true}
-        id="recordedStream"
-        width="600"
-        height="400"
-        muted={true}
-        ref={videoPreview}
-      ></video>
-      <RecordingController />
+      <StyledScreenRecorder>
+        <img className="logo" alt="Iterspace" src={logo} />
+        <div className='container'>
+          <XXL className="title" isBold>
+            Preview page by Iterspace
+          </XXL>
+          <MD>
+            <div>You have not entered your work area, but from here you can check what you are actually recording.</div>
+            <div>To save the video in the folder you want, log in.</div>
+          </MD>
+          <video
+            autoPlay={true}
+            id="recordedStream"
+            width="600"
+            height="400"
+            muted={true}
+            ref={videoPreview}
+          ></video>
+        </div>
+      </StyledScreenRecorder>
     </ThemeProvider>
   );
 };
