@@ -37,7 +37,6 @@
     "desktopCapture",
     "activeTab",
     "tabs",
-    "alarms",
     "webNavigation",
     "webRequest"
   ],
