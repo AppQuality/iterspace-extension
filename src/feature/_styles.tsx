@@ -1,3 +1,4 @@
+import { theme } from "@appquality/unguess-design-system";
 import styled from "styled-components";
 import { palette } from "../theme/palette";
 
@@ -9,6 +10,7 @@ export const StyledPopupHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${palette.grey[200]};
+  font-family: ${theme.fonts.system};
 
   .header-left {
     display: flex;
@@ -28,6 +30,7 @@ export const StyledPopupHeader = styled.div`
 export const StyledPopupBody = styled.div`
   padding: 0 40px;
   width: 405px;
+  font-family: ${theme.fonts.system};
 
   .generic-button {
     margin: 20px 0;
@@ -43,6 +46,7 @@ export const StyledPopupBody = styled.div`
 export const StyledManageAudio = styled.div`
   margin: 20px 0;
   display: flex;
+  font-family: ${theme.fonts.system};
 
   .audio-btn {
     border-color: ${palette.grey[300]};
