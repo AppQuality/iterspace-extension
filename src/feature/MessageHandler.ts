@@ -9,7 +9,8 @@ class MessageHandler {
   constructor(private chromeInstance: typeof chrome) {
     this.recordingManager = new Recording(new Stopwatch());
 
-    this.waitForCountdownFinished();
+    this.waitForInitialization();
+    this.waitForAbort();
     this.waitForScreenCaptureStart();
     this.waitForRecordingFinish();
     this.waitForSessionLinkable();
@@ -26,10 +27,19 @@ class MessageHandler {
     this.listenForConsoleDebug();
   }
 
-  public waitForCountdownFinished() {
-    this.onAlarm((alarm) => {
-      if (alarm.name === 'startRecordingCountDown') {
+  public waitForInitialization() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'startRecording') {
         this.recordingManager.start();
+      }
+    });
+  }
+
+  public waitForAbort() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'abortRecording') {
+        this.recordingManager.stop();
+        setStorageItem('recordingStatus', 'stopped');
       }
     });
   }
@@ -238,6 +248,11 @@ class MessageHandler {
   }
 
   private async openControlTab() {
+    try {
+      await chrome.tabs.get(this.controlTabId);
+    } catch (e) {
+      this.controlTabId = undefined;
+    }
     if (!this.controlTabId) {
       const newTab = await chrome.tabs.create({
         active: true,

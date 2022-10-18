@@ -9,7 +9,7 @@ interface IDomNode {
 }
 
 class DomNode implements IDomNode {
-  constructor(private node: HTMLElement) {}
+  constructor(private node: HTMLElement & { name?: string }) {}
 
   toString() {
     const attributes = `${this.id} ${this.className} ${this.name}`.trim();
