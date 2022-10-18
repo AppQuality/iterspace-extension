@@ -30,6 +30,12 @@ export class Recorder {
     this.mediaRecorder.onstop = () => {
       this.createBlob();
     };
+    this.stream.getTracks().forEach((track) =>
+      track.addEventListener("ended", () => {
+        setStorageItem('recordingStatus', 'stopped');
+        this.mediaRecorder.stop();
+      })
+    );
     this.mediaRecorder.start();
   }
 
