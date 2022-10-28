@@ -1,6 +1,6 @@
 {
   "name": "iterspace BETA: Screen Rec. + Feedback",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "💡 Share accurate feedback in seconds",
   "manifest_version": 3,
   "background": {
