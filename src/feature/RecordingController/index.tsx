@@ -12,7 +12,7 @@ import useAudioStatus from './useAudioStatus';
 export const RecordingController = () => {
   const { recordingStatus, startRecording, stopRecording } =
     useRecordingStatus();
-  const { micPermission } = useAudioStatus();
+  const { micPermission, askForMicPermission } = useAudioStatus();
 
   return (
     <div>
@@ -32,9 +32,12 @@ export const RecordingController = () => {
           <Button
             className="generic-button"
             themeColor={palette.grey[900]}
+            onClick={() => {
+              askForMicPermission();
+            }}
             isStretched
           >
-            Activate Microphone
+            Activate Microphones
           </Button>
         ) : (
           <ToggleAudioButton />

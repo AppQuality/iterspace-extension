@@ -22,7 +22,6 @@ class Microphone {
   async init() {
     this.audioStatus = await getStorageItem('audioStatus');
     this.selectedInput = await getStorageItem('audioDeviceId');
-    console.log(this);
     const devices = await navigator.mediaDevices.enumerateDevices();
     const audioDevices = devices.filter(
       (device) => device.kind === 'audioinput',
@@ -79,7 +78,6 @@ class Microphone {
       },
       video: false,
     });
-    console.log(audioStream);
     return audioStream;
   }
 }

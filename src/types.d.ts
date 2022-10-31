@@ -5,6 +5,7 @@ type ExtensionStorage = {
   recording?: object;
   recording_pageEvents?: any[];
   audioDeviceId: string;
+  requestMicPermission: boolean;
 };
 
 type MessageTypes = {
@@ -17,6 +18,7 @@ type MessageTypes = {
     | 'initScreenCapturing'
     | 'activateAudio'
     | 'deactivateAudio'
+    | 'iterspace:micPermissionRequest'
     | 'iterspace:clickEvent'
     | 'iterspace:consoleLog'
     | 'iterspace:consoleWarn'

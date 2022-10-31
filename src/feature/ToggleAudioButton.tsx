@@ -12,10 +12,9 @@ import {
 import { StyledManageAudio } from './_styles';
 import Microphone from './Microphone';
 
-export const ToggleAudioButton = ({}: {}) => {
+export const ToggleAudioButton = () => {
   const [microphone, setMicrophone] = useState<Microphone>(new Microphone());
   const [ready, setReady] = useState<boolean>(false);
-  const [selectedDeviceId, setSelectedDeviceId] = useState<string>();
 
   useEffect(() => {
     microphone.init().then(() => {

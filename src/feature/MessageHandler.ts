@@ -25,6 +25,7 @@ class MessageHandler {
     this.listenForConsoleError();
     this.listenForConsoleInfo();
     this.listenForConsoleDebug();
+    this.waitForMicPermissionRequest();
   }
 
   public waitForInitialization() {
@@ -49,6 +50,15 @@ class MessageHandler {
       if (message.type === 'initScreenCapturing') {
         await this.openControlTab();
         setStorageItem('recordingStatus', 'initScreenCapturing');
+      }
+    });
+  }
+
+  public waitForMicPermissionRequest() {
+    this.onInternalMessage(async (message: MessageTypes) => {
+      if (message.type === 'iterspace:micPermissionRequest') {
+        await this.openControlTab();
+        setStorageItem('requestMicPermission', true);
       }
     });
   }

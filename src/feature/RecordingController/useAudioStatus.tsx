@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getStorageItem, setStorageItem } from '../../storage';
+import { getStorageItem } from '../../storage';
 
 const useAudioStatus = () => {
   const [micPermission, setMicPermission] = useState<PermissionState>('denied');
@@ -29,6 +29,9 @@ const useAudioStatus = () => {
   return {
     micPermission,
     audioStatus,
+    askForMicPermission: async () => {
+      chrome.runtime.sendMessage<MessageTypes>({ type: 'iterspace:micPermissionRequest' });
+    },
   };
 };
 
