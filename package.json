@@ -7,6 +7,7 @@
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
+    "build-beta": "webpack --config webpack.dev.js",
     "lint": "eslint --ext .ts,.js --max-warnings=0 .",
     "prettier": "prettier --write"
   },
