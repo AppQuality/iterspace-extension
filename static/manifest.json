@@ -28,7 +28,7 @@
     }
   ],
   "externally_connectable": {
-    "matches": ["http://localhost/*"]
+    "matches": ["http://localhost/*", "https://app.iterspace.com/*", "https://develop.iterspace.com/*"]
   },
 
   "permissions": [
